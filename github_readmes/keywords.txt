@@ -1,6 +1,6 @@
-0:image, vision, adversarial, generative, recognition
-1:stochastic, recommendation, skipgram, machine, prediction
-2:entity, artificial, intelligence,
-3:lingual, emnlp, vocab, nlp, sentence, word, language, conversational
-4:amortize, entropy, estimation, statistically
-5:deviance, denoising, neural, evolution
+0:image,vision,adversarial,generative,recognition
+1:stochastic,recommendation,skipgram,machine,prediction
+2:entity,artificial,intelligence,
+3:lingual,emnlp,vocab,nlp,sentence,word,language,conversational
+4:amortize,entropy,estimation,statistically
+5:deviance,denoising,neural,evolution
