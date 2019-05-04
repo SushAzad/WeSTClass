@@ -47,15 +47,15 @@ def train_word2vec(sentence_matrix, vocabulary_inv, dataset_name, mode='skipgram
     return embedding_weights
 
 
-def write_output(write_path, y_pred, perm):
+def write_output(write_path, y_pred, perm, sup_source, model):
     invperm = np.zeros(len(perm), dtype='int32')
     for i,v in enumerate(perm):
         invperm[v] = i
     y_pred = y_pred[invperm]
-    with open(os.path.join(write_path, 'out.txt'), 'w') as f:
+    with open(os.path.join(write_path, str(sup_source)+str(model)+'out.txt'), 'w') as f:
         for val in y_pred:
             f.write(str(val) + '\n')
-    print("Classification results are written in {}".format(os.path.join(write_path, 'out.txt')))
+    print("Classification results are written in {}".format(os.path.join(write_path, str(sup_source)+str(model)+'out.txt')))
     return
 
 
@@ -68,9 +68,9 @@ if __name__ == "__main__":
     
     ### Basic settings ###
     # dataset selection: AG's News (default) and Yelp Review
-    parser.add_argument('--dataset', default='agnews', choices=['agnews', 'yelp', 'github_readmes'])
+    parser.add_argument('--dataset', default='agnews', choices=['agnews', 'yelp', 'github_readmes', 'github_commentsReadmes', 'github_readmesMerged', 'github_commentsCode'])
     # neural model selection: Convolutional Neural Network (default) and Hierarchical Attention Network
-    parser.add_argument('--model', default='cnn', choices=['cnn', 'rnn'])
+    parser.add_argument('--model', default='rnn', choices=['cnn', 'rnn'])
     # weak supervision selection: label surface names (default), class-related keywords and labeled documents
     parser.add_argument('--sup_source', default='labels', choices=['labels', 'keywords', 'docs'])
     # whether ground truth labels are available for evaluation: True (default), False
@@ -130,6 +130,21 @@ if __name__ == "__main__":
             pretrain_epochs = 30
             self_lr = 1e-4
             max_sequence_length = 500
+        elif args.dataset == 'github_commentsReadmes':
+            update_interval = 50
+            pretrain_epochs = 30
+            self_lr = 1e-4
+            max_sequence_length = 900
+        elif args.dataset == 'github_readmesMerged':
+            update_interval = 50
+            pretrain_epochs = 30
+            self_lr = 1e-4
+            max_sequence_length = 900
+        elif args.dataset == 'github_commentsCode':
+            update_interval = 50
+            pretrain_epochs = 30
+            self_lr = 1e-4
+            max_sequence_length = 900
 
         decay = 1e-6
     
@@ -148,6 +163,32 @@ if __name__ == "__main__":
             self_lr = 1e-4
             sent_len = 30
             doc_len = 40
+
+        elif args.dataset == 'github_readmes':
+            update_interval = 100
+            pretrain_epochs = 200
+            self_lr = 1e-4
+            sent_len = 45
+            doc_len = 40
+
+        elif args.dataset == 'github_commentsReadmes':
+            update_interval = 100
+            pretrain_epochs = 200
+            self_lr = 1e-4
+            sent_len = 45
+            doc_len = 150
+        elif args.dataset == 'github_readmesMerged':
+            update_interval = 100
+            pretrain_epochs = 200
+            self_lr = 1e-4
+            sent_len = 45
+            doc_len = 150
+        elif args.dataset == 'github_commentsCode':
+            update_interval = 100
+            pretrain_epochs = 200
+            self_lr = 1e-4
+            sent_len = 45
+            doc_len = 150
 
         decay = 1e-5
         max_sequence_length = [doc_len, sent_len]
@@ -253,4 +294,4 @@ if __name__ == "__main__":
             print('F1 score: f1_macro = {}, f1_micro = {}'.format(f1_macro, f1_micro))
     
     print("\n### Generating outputs ###")
-    write_output('./' + args.dataset, y_pred, perm)
+    write_output('./' + args.dataset, y_pred, perm, args.sup_source, args.model)

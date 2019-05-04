@@ -27,6 +27,18 @@ def read_file(data_dir, with_evaluation):
             elif data_dir == './github_readmes':
                 data.append(row[2])
                 target.append(int(row[0]))
+            elif data_dir == './github_commentsReadmes':
+                doc = row[2] + ' ' + row[3]
+                data.append(doc)
+                target.append(int(row[0]))
+            elif data_dir == './github_readmesMerged':
+                doc = row[3]
+                data.append(doc)
+                target.append(int(row[0]))
+            elif data_dir == './github_commentsCode':
+                doc = row[2] + ' ' + row[3]
+                data.append(doc)
+                target.append(int(row[0]))               
     if with_evaluation:
         y = np.asarray(target)
         assert len(data) == len(y)
@@ -248,6 +260,14 @@ def load_cnn(dataset_name, sup_source, num_keywords=10, with_evaluation=True, tr
             class_type = 'topic'
         elif dataset_name == 'agnews':
             class_type = 'topic'
+        elif dataset_name == 'github_readmes':
+            class_type = 'topic'
+        elif dataset_name == 'github_commentsReadmes':
+            class_type = 'topic'
+        elif dataset_name == 'github_readmesMerged':
+            class_type = 'topic'
+        elif dataset_name == 'github_commentsCode':
+            class_type = 'topic'
         elif dataset_name == 'yelp':
             class_type = 'sentiment'
         keywords, sup_idx = extract_keywords(data_path, vocabulary, class_type, num_keywords, data, perm)
@@ -324,6 +344,14 @@ def load_rnn(dataset_name, sup_source, num_keywords=10, with_evaluation=True, tr
         if dataset_name == 'nyt':
             class_type = 'topic'
         elif dataset_name == 'agnews':
+            class_type = 'topic'
+        elif dataset_name == 'github_readmes':
+            class_type = 'topic'
+        elif dataset_name == 'github_commentsReadmes':
+            class_type = 'topic'
+        elif dataset_name == 'github_readmesMerged':
+            class_type = 'topic'
+        elif dataset_name == 'github_commentsCode':
             class_type = 'topic'
         elif dataset_name == 'yelp':
             class_type = 'sentiment'
