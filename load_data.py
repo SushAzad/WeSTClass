@@ -3,11 +3,13 @@ import numpy as np
 import os
 import re
 import itertools
+import random
 from collections import Counter
 from os.path import join
 from nltk import tokenize
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
+
 
 
 def read_file(data_dir, with_evaluation):
@@ -36,12 +38,17 @@ def read_file(data_dir, with_evaluation):
                 data.append(doc)
                 target.append(int(row[0]))
             elif data_dir == './github_commentsCode':
-                doc = row[2] + ' ' + row[3]
+                doc = row[2] + '' + row[3]
+                mylist = list(doc)
+                random.shuffle(mylist)
+                doc = ' '.join(mylist)
                 data.append(doc)
                 target.append(int(row[0]))               
     if with_evaluation:
         y = np.asarray(target)
         assert len(data) == len(y)
+        print("Set range len: ", set(range(len(np.unique(y)))))
+        print("Unique ", set(np.unique(y)))
         assert set(range(len(np.unique(y)))) == set(np.unique(y))
     else:
         y = None
